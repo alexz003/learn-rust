@@ -1,4 +1,5 @@
 use std::io;
+use std::collections::HashMap;
 
 fn main() {
     // variables_mutability_shadowing();
@@ -10,7 +11,8 @@ fn main() {
     // referencing_and_borrowing();
     // slices();
     // structs();
-    enums();
+    // enums();
+    collections();
 }
 
 fn variables_mutability_shadowing() {
@@ -363,4 +365,79 @@ fn enums() {
 
     println!("Address: {}", ip.to_string());
     println!("Address: {}", ip2.to_string());
+}
+
+fn collections() {
+    let v: Vec<i32> = Vec::new();
+
+    let mut v = vec![1, 2, 3];
+    let val = v.get(2);
+
+    println!("The third element is {}", &v[2]);
+    match val {
+        Some(val) => println!("The value is {}", val),
+        None => println!("The value is unknown")
+    };
+
+    for i in &mut v {
+        *i += 50;
+        println!("{}", i);
+    }
+
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Text(String::from("Blue")),
+        SpreadsheetCell::Float(10.12)
+    ];
+
+    let mut s1 = String::from("foo");
+    let s2 = "bar";
+    s1.push_str(s2);
+    println!("s2 is {s2}");
+
+    let s1 = String::from("Hello, ");
+    let s2 = String::from("World");
+    let s3 = s1 + &s2;
+    println!("{s3}");
+
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+    let score = scores.get(&team_name).copied().unwrap_or(0);
+    println!("{team_name} has {score} points.");
+
+    for (key, value) in &scores {
+        println!("{key}: {value}");
+    }
+
+    let field_name = String::from("Favorite color");
+    let field_value = String::from("Blue");
+
+    let mut map = HashMap::new();
+    map.insert(&field_name, &field_value);
+
+    println!("{field_name}: {field_value}");
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Blue"), 25);
+
+    println!("{scores:?}");
+
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+
+    scores.entry(String::from("Yellow")).or_insert(50);
+    scores.entry(String::from("Blue")).or_insert(50);
+
+    println!("{scores:?}");
 }
