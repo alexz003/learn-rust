@@ -12,7 +12,7 @@ fn main() {
     // slices();
     // structs();
     // enums();
-    collections();
+    // collections();
 }
 
 fn variables_mutability_shadowing() {
@@ -441,3 +441,4 @@ fn collections() {
 
     println!("{scores:?}");
 }
+
