@@ -6,7 +6,9 @@ fn main() {
     // data_types();
     // parameter(10);
     // control_flow();
-    ownership();
+    // ownership();
+    //referencing_and_borrowing();
+    slices();
 }
 
 fn variables_mutability_shadowing() {
@@ -232,4 +234,24 @@ fn calculate_length(s: String) -> (String, usize) {
     let length = s.len();
 
     (s, length)
+}
+
+fn referencing_and_borrowing() {
+    let mut s1 = String::from("hello");
+
+    let len = calculate_length_ref(&mut s1); // <-- Passing a reference to a value does not drop the value
+
+    println!("The length of {s1} is {len}"); // <-- s1 is still available because it was not dropped in calculate_length_ref
+}
+
+fn calculate_length_ref(str: &mut String) -> usize {
+    let length = str.len();
+
+    str.push_str(", world");
+
+    str.len()
+}
+
+fn slices() {
+    
 }
