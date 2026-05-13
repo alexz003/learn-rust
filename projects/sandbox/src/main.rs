@@ -6,6 +6,7 @@ fn main() {
     // data_types();
     // parameter(10);
     // control_flow();
+    ownership();
 }
 
 fn variables_mutability_shadowing() {
@@ -167,4 +168,68 @@ fn control_flow() {
     for number in (1..=4).rev() {
         println!("number: {number}");
     }
+}
+
+fn ownership() {
+    // let mut s: String = "hello"; <--- not value as "string" is type &str, not String
+    let mut s = String::from("hello");
+
+    s.push_str(", world!");
+
+    println!("{s}");
+
+    let x = 5;
+    let y = x;
+
+    let s1 = String::from("hello");
+    let mut s2 = s1.clone();
+    s2.push_str(", world");
+
+    println!("s1 = {s1}, s2 = {s2}");
+    
+    // let s3 = String::from("hello");
+    // let mut s4 = s3;
+    // s4.push_str(", world");
+
+    // println!("s3 = {s3}, s4 = {s4}"); <--- no longer valid as s3 has been shadowed by s4
+
+    let s = String::from("hello");
+
+    takes_ownership(s); // - move occurs because `s` has type `String`, which does not implement the `Copy` trait
+
+    // println!("lost ownership: {s}"); <-- s was borrowed by takes_ownership, which called drop on s as String did not implement `Copy`. Compiler error
+
+    let x = 5;
+
+    makes_copy(x); // ints implement Copy so x is not borrowed by this call
+
+    println!("copied: {x}"); 
+
+    let s = String::from("hello");
+    let s1 = takes_and_gives_back(s);
+
+    println!("{s1}");
+
+    let s = String::from("hello");
+
+    let (s2, len) = calculate_length(s);
+    println!("The length of '{s2}' is {len}.")
+}
+
+fn takes_ownership(some_str: String) {
+    println!("{some_str}");
+}
+
+fn makes_copy(some_int: i32) {
+    println!("{some_int}");
+}
+
+fn takes_and_gives_back(some_str: String) -> String {
+    some_str
+}
+
+fn calculate_length(s: String) -> (String, usize) {
+    let length = s.len();
+
+    (s, length)
 }
