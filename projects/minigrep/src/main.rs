@@ -2,13 +2,13 @@ use std::env;
 use std::fs;
 use std::process;
 use std::error::Error;
-use minigrep::search;
+use minigrep::{search, search_case_insensitive};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {err}");
+        eprintln!("Problem parsing arguments: {err}");
         process::exit(1);
     });
 
@@ -16,7 +16,7 @@ fn main() {
     println!("In file {}", config.file_path);
 
     if let Err(e) = run(config) {
-        println!("Application error: {e}");
+        eprintln!("Application error: {e}");
         process::exit(1);
     }
 }
@@ -25,16 +25,25 @@ fn run(config: Config) -> Result<(), Box<dyn Error>>{
     let contents = fs::read_to_string(config.file_path)
         .expect("Unable to read file");
 
-    for line in search(&config.query, &contents) {
-        println!("{line}");
+
+    if config.ignore_case {
+        for line in search_case_insensitive(&config.query, &contents) {
+            println!("{line}");
+        }
+    }
+    else {
+        for line in search(&config.query, &contents) {
+            println!("{line}");
+        }
     }
 
     Ok(())
 }
 
 struct Config {
-    query: String,
-    file_path: String,
+    pub query: String,
+    pub file_path: String,
+    pub ignore_case: bool
 }
 
 impl Config {
@@ -45,7 +54,8 @@ impl Config {
 
         let query = args[1].clone();
         let file_path = args[2].clone();
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
 
-        Ok(Config { query, file_path })
+        Ok(Config { query, file_path, ignore_case })
     }
 }
