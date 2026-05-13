@@ -253,5 +253,42 @@ fn calculate_length_ref(str: &mut String) -> usize {
 }
 
 fn slices() {
+    let mut s = String::from("hello world");
+
+    let word = first_word(&s); // word will get the value "hello"
+
+    //s.clear(); // <-- word is borrowing s, so s is no longer available to use
     
+    println!("{word}");
+
+    let s = "Hello, world!";
+
+    let word = first_word_lit(&s[0..5]);
+
+    println!("{word}");
+
+}
+
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
+}
+
+fn first_word_lit(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
 }
