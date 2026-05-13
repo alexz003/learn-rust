@@ -8,7 +8,8 @@ fn main() {
     // control_flow();
     // ownership();
     //referencing_and_borrowing();
-    slices();
+    //slices();
+    structs();
 }
 
 fn variables_mutability_shadowing() {
@@ -291,4 +292,44 @@ fn first_word_lit(s: &str) -> &str {
     }
 
     &s[..]
+}
+
+struct User {
+        active: bool,
+        username: String,
+        email: String,
+        sign_in_count: u64
+}
+
+fn structs() {
+    let mut user1 = build_user("someusername@email.com".to_string(), "someusername".to_string());
+
+    user1.sign_in_count += 1;
+
+    let username = &user1.username; // <-- create a reference to allow us to keep user1.username in place and not get shadowed
+    let sign_in_count = &user1.sign_in_count;
+    println!("{username} has signed in {sign_in_count} time(s).");
+
+    let user2 = User {
+        email: String::from("anotheremail@email.com"),
+        ..user1 // <-- allows us to copy the rest of the properties from user1
+    };
+
+    let username = &user2.username;
+    let sign_in_count = &user2.sign_in_count;
+    let email = &user2.email;
+    println!("{username} at {email} has signed in {sign_in_count} time(s).");
+
+    let subject = AlwaysEqual;
+}
+
+struct AlwaysEqual;
+
+fn build_user(email: String, username: String) -> User {
+    User {
+        active: true,
+        username, // insted of username: username, we can use the same variable name
+        email, // same with email
+        sign_in_count: 1
+    }
 }
