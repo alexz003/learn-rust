@@ -20,7 +20,7 @@ fn main() {
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => {
-                println!("Not a number!");
+                not_a_number_error();
                 continue;
             }
         };
@@ -36,4 +36,9 @@ fn main() {
             }
         }
     }
+}
+
+
+fn not_a_number_error() {
+    println!("Not a number!");
 }
