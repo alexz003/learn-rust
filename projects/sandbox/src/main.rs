@@ -7,9 +7,10 @@ fn main() {
     // parameter(10);
     // control_flow();
     // ownership();
-    //referencing_and_borrowing();
-    //slices();
-    structs();
+    // referencing_and_borrowing();
+    // slices();
+    // structs();
+    enums();
 }
 
 fn variables_mutability_shadowing() {
@@ -332,4 +333,34 @@ fn build_user(email: String, username: String) -> User {
         email, // same with email
         sign_in_count: 1
     }
+}
+
+enum IpAddr {
+    V4(u8, u8, u8, u8),
+    V6(String)
+}
+
+impl IpAddr {
+    fn to_string(&self) -> String {
+        match self {
+            IpAddr::V4(a, b, c, d) => {
+                format!("{}.{}.{}.{}", a, b, c, d).to_string()
+            },
+            IpAddr::V6(str) => {
+                str.to_string()
+            }
+        }
+    }
+}
+
+fn route(ip_kind: IpAddr) {
+
+}
+
+fn enums() {
+    let ip = IpAddr::V4(127, 0, 0, 1);
+    let ip2 = IpAddr::V6(String::from("::1"));
+
+    println!("Address: {}", ip.to_string());
+    println!("Address: {}", ip2.to_string());
 }
